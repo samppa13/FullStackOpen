@@ -47,6 +47,31 @@ const App = () => {
     setAverage(average - 1)
   }
 
+  if (allClicks == 0) {
+    return (
+      <div>
+        <h1>
+          give feedback
+        </h1>
+        <button onClick={goodByOne}>
+          good
+        </button>
+        <button onClick={neutralByOne}>
+          neutral
+        </button>
+        <button onClick={badByOne}>
+          bad
+        </button>
+        <h1>
+          statistics
+        </h1>
+        <p>
+          No feedback given
+        </p>
+      </div>
+    )
+  }
+
   return (
     <div>
       <h1>
