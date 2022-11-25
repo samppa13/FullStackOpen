@@ -2,13 +2,14 @@ import { useState } from 'react'
 
 const App = () => {
   const [persons, setPersons] = useState([
-    {
-      name: 'Arto Hellas',
-      number: '040-1231244'
-    }
+    { name: 'Arto Hellas', number: '040-123456' },
+    { name: 'Ada Lovelace', number: '39-44-5323523' },
+    { name: 'Dan Abramov', number: '12-43-234345' },
+    { name: 'Mary Poppendieck', number: '39-23-6423122' }
   ]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [showAll, setShowAll] = useState('')
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -31,10 +32,22 @@ const App = () => {
   const handleNumberChange = (event) => {
     setNewNumber(event.target.value)
   }
+  const handleShowAllChange = (event) => {
+    setShowAll(event.target.value)
+  }
+
+  const showPersons = showAll === ''
+    ? persons
+    : persons.filter(person => person.name.toLowerCase().includes(showAll.toLowerCase()))
 
   return (
     <div>
       <h2>Phonebook</h2>
+      filter shown with <input
+      value={showAll}
+      onChange={handleShowAllChange}
+      />
+      <h2>add a new</h2>
       <form onSubmit={addPerson}>
         <div>
           name: <input
@@ -53,7 +66,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map(person =>
+      {showPersons.map(person =>
         <p key={person.name}>
           {person.name} {person.number}
         </p>
