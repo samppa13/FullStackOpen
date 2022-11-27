@@ -1,5 +1,56 @@
 import { useState } from 'react'
 
+const Filter = ({ showAll, handleShowAllChange }) => {
+  return (
+    <div>
+      filter shown with <input
+      value={showAll}
+      onChange={handleShowAllChange}
+      />
+    </div>
+  )
+}
+
+const PersonForm = ({ addPerson, newName, handleNameChange, newNumber, handleNumberChange }) => {
+  return (
+    <form onSubmit={addPerson}>
+      <div>
+        name: <input
+        value={newName}
+        onChange={handleNameChange}
+        />
+      </div>
+      <div>
+        number: <input
+        value={newNumber}
+        onChange={handleNumberChange}
+        />
+      </div>
+      <div>
+        <button type='submit'>add</button>
+      </div>
+    </form>
+  )
+}
+
+const Person = ({ person }) => {
+  return (
+    <p>
+      {person.name} {person.number}
+    </p>
+  )
+}
+
+const Persons = ({ showPersons }) => {
+  return (
+    <div>
+      {showPersons.map(person =>
+        <Person key={person.name} person={person} />
+      )}
+    </div>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas', number: '040-123456' },
@@ -43,34 +94,12 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      filter shown with <input
-      value={showAll}
-      onChange={handleShowAllChange}
-      />
-      <h2>add a new</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input
-          value={newName}
-          onChange={handleNameChange}
-          />
-        </div>
-        <div>
-          number: <input
-          value={newNumber}
-          onChange={handleNumberChange}
-          />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      {showPersons.map(person =>
-        <p key={person.name}>
-          {person.name} {person.number}
-        </p>
-      )}
+      <Filter showAll={showAll} handleShowAllChange={handleShowAllChange} />
+      <h3>Add a new</h3>
+      <PersonForm addPerson={addPerson} newName={newName} handleNameChange={handleNameChange}
+      newNumber={newNumber} handleNumberChange={handleNumberChange} />
+      <h3>Numbers</h3>
+      <Persons showPersons={showPersons} />
     </div>
   )
 
