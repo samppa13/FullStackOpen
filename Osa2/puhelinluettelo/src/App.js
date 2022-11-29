@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import personService from './services/persons'
 
 const Filter = ({ showAll, handleShowAllChange }) => {
@@ -35,19 +34,22 @@ const PersonForm = ({ addPerson, newName, handleNameChange, newNumber, handleNum
   )
 }
 
-const Person = ({ person }) => {
+const Person = ({ person, deletePerson }) => {
   return (
     <p>
       {person.name} {person.number}
+      <button onClick={deletePerson} id={person.id}>
+        delete
+      </button>
     </p>
   )
 }
 
-const Persons = ({ showPersons }) => {
+const Persons = ({ showPersons, deletePerson }) => {
   return (
     <div>
       {showPersons.map(person =>
-        <Person key={person.name} person={person} />
+        <Person key={person.name} person={person} deletePerson={deletePerson} />
       )}
     </div>
   )
@@ -95,6 +97,13 @@ const App = () => {
   const handleShowAllChange = (event) => {
     setShowAll(event.target.value)
   }
+  const deletePerson = (event) => {
+    personService
+      .remove(event.target.id)
+      .then(removedPerson => {
+        setPersons(persons.filter(person => person.id != event.target.id))
+      })
+  }
 
   const showPersons = showAll === ''
     ? persons
@@ -108,7 +117,7 @@ const App = () => {
       <PersonForm addPerson={addPerson} newName={newName} handleNameChange={handleNameChange}
       newNumber={newNumber} handleNumberChange={handleNumberChange} />
       <h3>Numbers</h3>
-      <Persons showPersons={showPersons} />
+      <Persons showPersons={showPersons} deletePerson={deletePerson} />
     </div>
   )
 
