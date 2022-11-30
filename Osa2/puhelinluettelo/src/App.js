@@ -98,11 +98,15 @@ const App = () => {
     setShowAll(event.target.value)
   }
   const deletePerson = (event) => {
-    personService
-      .remove(event.target.id)
-      .then(removedPerson => {
-        setPersons(persons.filter(person => person.id != event.target.id))
-      })
+    const deleteName = persons.filter(person =>
+      person.id == event.target.id).map(person => person.name)
+    if (window.confirm(`Delete ${deleteName} ?`)) {
+      personService
+        .remove(event.target.id)
+        .then(removedPerson => {
+          setPersons(persons.filter(person => person.id != event.target.id))
+        })
+    }
   }
 
   const showPersons = showAll === ''
