@@ -1,6 +1,17 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
 
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+  return (
+    <div className='error'>
+      {message}
+    </div>
+  )
+}
+
 const Filter = ({ showAll, handleShowAllChange }) => {
   return (
     <div>
@@ -60,6 +71,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [showAll, setShowAll] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -81,6 +93,12 @@ const App = () => {
             setPersons(persons.map(person => person.id !== oldPerson.id ? person : returnedPerson))
             setNewName('')
             setNewNumber('')
+            setErrorMessage(
+              `Updated ${changedPerson.name}`
+            )
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
           })
       }
     }
@@ -95,6 +113,12 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
+          setErrorMessage(
+            `Added ${returnedPerson.name}`
+          )
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
         })
     }
   }
@@ -115,6 +139,12 @@ const App = () => {
         .remove(event.target.id)
         .then(removedPerson => {
           setPersons(persons.filter(person => person.id != event.target.id))
+          setErrorMessage(
+            `Deleted ${deleteName}`
+          )
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
         })
     }
   }
@@ -126,6 +156,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={errorMessage} />
       <Filter showAll={showAll} handleShowAllChange={handleShowAllChange} />
       <h3>Add a new</h3>
       <PersonForm addPerson={addPerson} newName={newName} handleNameChange={handleNameChange}
