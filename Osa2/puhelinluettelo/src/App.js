@@ -5,16 +5,16 @@ const Notification = ({ message }) => {
   if (message === null) {
     return null
   }
-  else if (message.includes('Information')) {
+  else if (message[1] === 'error') {
     return (
       <div className='error'>
-        {message}
+        {message[0]}
       </div>
     )
   }
   return (
     <div className='noError'>
-      {message}
+      {message[0]}
     </div>
   )
 }
@@ -101,7 +101,7 @@ const App = () => {
             setNewName('')
             setNewNumber('')
             setErrorMessage(
-              `Updated ${changedPerson.name}`
+              [`Updated ${changedPerson.name}`, 'noError']
             )
             setTimeout(() => {
               setErrorMessage(null)
@@ -109,7 +109,7 @@ const App = () => {
           })
           .catch(error => {
             setErrorMessage(
-              `Information of ${newName} has already been removed from server`
+              [`Information of ${newName} has already been removed from server`, 'error']
             )
             setTimeout(() => {
               setErrorMessage(null)
@@ -129,7 +129,15 @@ const App = () => {
           setNewName('')
           setNewNumber('')
           setErrorMessage(
-            `Added ${returnedPerson.name}`
+            [`Added ${returnedPerson.name}`, 'noError']
+          )
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+        })
+        .catch(error => {
+          setErrorMessage(
+            [error.response.data.error, 'error']
           )
           setTimeout(() => {
             setErrorMessage(null)
@@ -155,7 +163,7 @@ const App = () => {
         .then(removedPerson => {
           setPersons(persons.filter(person => person.id != event.target.id))
           setErrorMessage(
-            `Deleted ${deleteName}`
+            [`Deleted ${deleteName}`, 'noError']
           )
           setTimeout(() => {
             setErrorMessage(null)
