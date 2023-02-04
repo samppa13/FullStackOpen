@@ -156,12 +156,12 @@ const App = () => {
   }
   const deletePerson = (event) => {
     const deleteName = persons.filter(person =>
-      person.id === parseInt(event.target.id)).map(person => person.name)
+      person.id === event.target.id).map(person => person.name)
     if (window.confirm(`Delete ${deleteName} ?`)) {
       personService
         .remove(event.target.id)
         .then(removedPerson => {
-          setPersons(persons.filter(person => person.id !== parseInt(event.target.id)))
+          setPersons(persons.filter(person => person.id !== event.target.id))
           setErrorMessage(
             [`Deleted ${deleteName}`, 'noError']
           )
